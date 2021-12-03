@@ -43,14 +43,30 @@ class NPC:
         ###Capacidade que um personagem tem de trazer um amigo de volta à sanidade.
         self.pep_talk = cha*2 + wil
 
-def combate(numero_inimigos, inimigo_tipo):
+def combate(numero_inimigos, inimigo_tipo, players_dic):
     inim_dic_loc = {}
     ###Criar instancia de inimigo1, depois inimigo2, inimigo3, etc. Então colocar tudo em inim_dic_loc
     for n in range(1,numero_inimigos+1):
         inim_dic_loc[f'{inimigo_tipo}' + '{}'.format(n)] = inimigos_dic[inimigo_tipo]
+    npc_dic = players_dic + inim_dic_loc
+    ###Ordenar os turnos através dos valores de agilidade de todos dentro de npc_dic
+    valores_npc_dic = npc_dic.values()
+    lista_npc_dic = list(valores_npc_dic)
+    ###Criar a lista de agilidades, preenchê-la com os valores dos players e então ordená-la
+    lista_npc_agi = []
+    for x in lista_npc_dic:
+        lista_npc_agi.append(x.agi)
+    lista_npc_agi.sort()
 
 
 
+
+players_dic = {
+    'PlayerTeste1' : NPC(10, 12, 6, 8, 9, 10, 12, 15, 8, 5),
+    'PlayerTeste2' : NPC(10, 12, 6, 8, 9, 10, 12, 15, 8, 5),
+    'PlayerTeste3' : NPC(10, 12, 6, 8, 9, 10, 12, 15, 8, 5),
+    'PlayerTeste4' : NPC(10, 12, 6, 8, 9, 10, 12, 15, 8, 5)
+}
 
 inimigos_dic = {
 'abominacao' : NPC(30, 2, 1, 1, 0, 20, 2, 8, 2, 50),
