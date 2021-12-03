@@ -23,6 +23,9 @@
 
 class NPC:
     def __init__(self, stg, agi, int, wis, cha, tou, per, wil, luc, ins):
+        ###Facilita a referencia aos stats
+        self.stg, self.agi, self.int, self.wis, self.cha = stg, agi, int, wis, cha
+        self.tou, self.per, self.wil, self.luc, self.ins = tou, per, wil, luc, ins
         ###Aqui temos a barra que nos mostra o quanto um personagem tolerou de dano físico
         self.hp_saude = (tou * 5) + stg
         ###Aqui temos a barra que nos mostra o quanto um personagem tolerou de dano mental
@@ -40,11 +43,22 @@ class NPC:
         ###Capacidade que um personagem tem de trazer um amigo de volta à sanidade.
         self.pep_talk = cha*2 + wil
 
+def combate(numero_inimigos, inimigo_tipo):
+    inim_dic_loc = {}
+    ###Criar instancia de inimigo1, depois inimigo2, inimigo3, etc. Então colocar tudo em inim_dic_loc
+    for n in range(1,numero_inimigos+1):
+        inim_dic_loc[f'{inimigo_tipo}' + '{}'.format(n)] = inimigos_dic[inimigo_tipo]
 
-abominacao = NPC(30, 2, 1, 1, 0, 20, 2, 8, 2, 50)
-carnical = NPC(2,20,1,1,1,3,3,2,4,25)
-soldado = NPC(8,8,6,4,6,9,8,7,5,15)
-campones = NPC(5,5,5,5,5,5,5,5,5,5)
 
-print(abominacao.hp_saude)
+
+
+inimigos_dic = {
+'abominacao' : NPC(30, 2, 1, 1, 0, 20, 2, 8, 2, 50),
+'carnical' : NPC(2, 20, 1, 1, 1, 3, 3, 2, 4, 25),
+'soldado' : NPC(8, 8, 6, 4, 6, 9, 8, 7, 5, 15),
+'campones' : NPC(5, 5, 5, 5, 5, 5, 5, 5, 5, 5)
+}
+
+
+print(inimigos_dic['abominacao'].hp_saude)
 
