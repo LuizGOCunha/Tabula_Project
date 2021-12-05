@@ -60,10 +60,10 @@ rn = random.randint(0,100)
 
 
 players_dic = {
-    'PlayerTeste1' : NPC('Player', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0),
-    'PlayerTeste2' : NPC('Player', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0),
-    'PlayerTeste3' : NPC('Player', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0),
-    'PlayerTeste4' : NPC('Player', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0)
+    'PlayerTeste1' : NPC('Player1', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0),
+    'PlayerTeste2' : NPC('Player2', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0),
+    'PlayerTeste3' : NPC('Player3', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0),
+    'PlayerTeste4' : NPC('Player4', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0)
 }
 
 inimigos_dic = {
