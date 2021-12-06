@@ -52,14 +52,14 @@ inimigos_dic = {
 def ataque(roll, vida_alvo, dano_base,combate_crit,acc,dodge):
     roll_crit = 20 - combate_crit
     chance_acerto = acc - dodge
+    dano = dano_base + roll
     if roll*5 > chance_acerto:
         print("Desviou!")
     elif roll >= roll_crit:
         print("CRITICO!")
-        dano = dano_base*2 + roll/2
+        dano = dano*2
     else:
         print("Acertou!")
-        dano = dano_base + roll
         vida_alvo-=dano
     return vida_alvo, dano
 
@@ -118,6 +118,7 @@ def combate_prompt(npc_dic):
         lista_npc_agi.append(x.agi)
     lista_npc_agi.sort()
     ###Após isso rodar as rodadas em ordem de velocidade (magnitude de agi)
+    # tudo está dando errado pois o player 2 3 e 4 tem a mesma agilidade que 1, então o 1 acaba indo varias vezes
     combat_end_flag = 0
     rodada = 1
     npc_dic = combate(combat_end_flag,rodada,lista_npc_dic,lista_npc_agi,npc_dic)
