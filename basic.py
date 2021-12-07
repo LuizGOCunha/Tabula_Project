@@ -34,19 +34,19 @@ rn = random.randint(0,100)
 
 
 
-players_dic = {
-    'PlayerTeste1' : NPC('Player1', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0),
-    'PlayerTeste2' : NPC('Player2', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0),
-    'PlayerTeste3' : NPC('Player3', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0),
-    'PlayerTeste4' : NPC('Player4', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0)
-}
+players_lista = [
+    NPC('Player1', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0),
+    NPC('Player2', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0),
+    NPC('Player3', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0),
+    NPC('Player4', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0)
+]
 
-inimigos_dic = {
-'abominacao' : NPC(f'abominacao{rn}', 30, 2, 1, 1, 0, 20, 2, 8, 2, 50, 1),
-'carnical' : NPC(f'carnical{rn}', 2, 20, 1, 1, 1, 3, 3, 2, 4, 25, 1),
-'soldado' : NPC(f'soldado{rn}', 8, 8, 6, 4, 6, 9, 8, 16, 5, 15, 1),
-'campones' : NPC(f'campones{rn}', 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1)
-}
+inimigos_lista = [
+NPC(f'abominacao{rn}', 30, 2, 1, 1, 0, 20, 2, 8, 2, 50, 1),
+NPC(f'carnical{rn}', 2, 20, 1, 1, 1, 3, 3, 2, 4, 25, 1),
+NPC(f'soldado{rn}', 8, 8, 6, 4, 6, 9, 8, 16, 5, 15, 1),
+NPC(f'campones{rn}', 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1)
+]
 
 
 def ataque(roll, vida_alvo, dano_base,combate_crit,acc,dodge):
@@ -68,112 +68,131 @@ def ataque(roll, vida_alvo, dano_base,combate_crit,acc,dodge):
 ###Então ordenamos o combate através de turnos. Puxando funções de ataque e cheques quando necessário.
 ###O combate termina quando todos os inimigos ou heróis estiverem mortos.
 
-def prompt(players_dic, npc_dic):
-    print('Bem vindo ao projeto tábula.')
+def prompt(players_lista, npc_lista):
+    print('Bem vindo ao projeto Tabula.')
     while True:
         comando = input('>')
         if comando == "inserir":
            print('Inserir quem?')
-           print(players_dic)
+           for x in players_lista:
+                print(x.nome)
            insert_input = input('>')
            if insert_input == 'tudo':
-               npc_dic.update(players_dic)
+               for x in players_lista:
+                   npc_lista.append(x)
+               for x in npc_lista:
+                   print(x.nome)
            else:
                # Não consigo fazer ele acrescentar um item por vez, lembra de consertar isso
-               npc_dic.update(players_dic[insert_input])
+               for npc in players_lista:
+                    if npc.nome == insert_input:
+                        npc_lista.append(npc)
         elif comando == "combate":
-            npc_dic = combate_prompt(npc_dic)
+            npc_lista = combate_prompt(npc_lista)
         elif comando == "reset":
             print('Resetar quem?')
             reset_input = input('>')
-            npc_dic[reset_input] = players_dic[reset_input]
+            for idx1, npc in enumerate(npc_lista):
+                if npc.nome == reset_input:
+                    for idx2, npc_stat in enumerate(players_lista):
+                        if npc.nome == npc_stat.nome:
+                            npc_lista[idx1] = npc_stat[idx2]
         elif comando == 'check':
-            print(npc_dic)
+            for x in npc_lista:
+                print(x.nome, x.hp_saude)
         elif comando == "exit":
             print('Até a próxima.')
-            break
+            exit()
 
-def status_check(npc_dic):
-    for npc in npc_dic:
-        print(f'{npc}:')
-        print(f'HP: {npc_dic[npc].hp_saude}')
+def status_check(npc_lista):
+    for indxc, npc in enumerate(npc_lista):
+        print(f'{npc_lista[indxc].nome}:')
+        print(f'HP: {npc_lista[indxc].hp_saude}')
 
-def combate_prompt(npc_dic):
+def combate_prompt(npc_lista):
     print('Quais os inimigos? (Quantidade e oponentes separados por espaço, e sempre em singular)')
     inpt_inimigos = input('>')
-    lista_inimigos = inpt_inimigos.split(' ')
-    numero_inimigos = int(lista_inimigos[0])
-    inimigo_tipo = lista_inimigos[1]
-    inim_dic_loc = {}
-    ###Criar instancia de inimigo1, depois inimigo2, inimigo3, etc. Então colocar tudo em inim_dic_loc
-    for n in range(1,numero_inimigos+1):
-        inim_dic_loc[f'{inimigo_tipo}' + '{}'.format(n)] = inimigos_dic[inimigo_tipo]
-    npc_dic.update(inim_dic_loc)
+    lista_input = inpt_inimigos.split(' ')
+    numero_inimigos = int(lista_input[0])
+    inimigo_tipo = lista_input[1]
+    ###Criar instancia de inimigos. Então colocar tudo em npc_lista
+    for indx, x in enumerate(inimigos_lista):
+        if x.nome == inimigo_tipo:
+            for n in range(0,numero_inimigos):
+                npc_lista.append(inimigos_lista[indx])
     ###Ordenar os turnos através dos valores de agilidade de todos dentro de npc_dic
-    valores_npc_dic = npc_dic.values()
-    lista_npc_dic = list(valores_npc_dic)
-    ###Criar a lista de agilidades, preenchê-la com os valores dos players e então ordená-la
-    lista_npc_agi = []
-    for x in lista_npc_dic:
-        lista_npc_agi.append(x.agi)
-    lista_npc_agi.sort()
+    npc_lista_agi = []
+    while npc_lista:
+        minimum = npc_lista[0]
+        for x in npc_lista:
+            if x.agi < minimum.agi:
+                minimum = x
+        npc_lista_agi.append(minimum)
+        npc_lista.remove(minimum)
+    npc_lista = npc_lista_agi
+    for x in npc_lista:
+        print(x.nome)
     ###Após isso rodar as rodadas em ordem de velocidade (magnitude de agi)
     # tudo está dando errado pois o player 2 3 e 4 tem a mesma agilidade que 1, então o 1 acaba indo varias vezes
     combat_end_flag = 0
     rodada = 1
-    npc_dic = combate(combat_end_flag,rodada,lista_npc_dic,lista_npc_agi,npc_dic)
-    print(npc_dic)
+    npc_lista = combate(combat_end_flag, rodada,npc_lista)
+    print(npc_lista)
+    return npc_lista
 
 
 def players_adicao(npc_dic,players_dic):
     npc_dic += players_dic
     return npc_dic
 
-def combate(combat_end_flag, rodada, lista_npc_dic, lista_npc_agi, npc_dic):
+def combate(combat_end_flag, rodada, npc_lista):
     while combat_end_flag == 0:
         print(f'Rodada:{rodada}')
         combat_continue_flag = 0
-        for npc in lista_npc_dic:
-            for n in range(1, len(lista_npc_dic) + 1):
-                if npc.agi == lista_npc_agi[n]:
-                    print(npc.nome)
-                    print('O que fazer?')
-                    acao = input('>')
-                    if acao == 'atacar':
-                        print('Qual o alvo?')
-                        print(npc_dic)
-                        # É necessário ter uma marca para os stats originais e ter um grupo para os stats alterados pelo combate
-                        # Logo, é preciso utilizar o dicionario de players e inimigos como referencia, e o de npcs como valor alterável no rpg
-                        alvo = input('>')
-                        print('Qual o valor do dado?')
-                        roll = int(input('>'))
-                        npc_dic[alvo].hp_saude, dano_efetivo = ataque(roll, npc_dic[alvo].hp_saude, npc.base_damage,
-                                                                      npc.base_combat_crit, npc.base_acc,
-                                                                      npc_dic[alvo].base_dodge)
-                        print(dano_efetivo)
-                        print(npc_dic[alvo].hp_saude)
-                        if npc_dic[alvo].hp_saude < 0:
-                            print('O alvo morreu!')
-                            del npc_dic[alvo]
-                        if npc.hp_saude < 0:
-                            print('Você morreu!')
-                            del npc_dic[npc]
-                        rodada += 1
-                    if acao == 'check':
-                        status_check(npc_dic)
-                    else:
-                        print('___________')
-                    # Após checar as ações é necessário checar os times para saber se o combate continua para o próximo round
-                    # Se todos forem do mesmo time dos players, o combate se encerra. Caso contrario continua.
-                    for time in npc_dic:
-                        if npc_dic[time].time == 0:
-                            # Esse é dos nossos, checa o próximo
-                            continue
-                        else:
-                            # Esse é inimigo, continua o combate
-                            combat_continue_flag += 1
-                            break
-                    if combat_continue_flag == 0:
-                        combat_end_flag += 1
-                    rodada += 1
-    return npc_dic
+        for indxr, npc in enumerate(npc_lista):
+             print(npc.nome)
+             print('O que fazer?')
+             acao = input('>')
+             if acao == 'atacar':
+                 print('Qual o alvo?')
+                 for indx, x in enumerate(npc_lista):
+                     print(indx, npc_lista.nome, npc_lista.vida)
+                 # É necessário ter uma marca para os stats originais e ter um grupo para os stats alterados pelo combate
+                 # Logo, é preciso utilizar o dicionario de players e inimigos como referencia, e o de npcs como valor alterável no rpg
+                     alvo = int(input('>'))
+                     print('Qual o valor do dado?')
+                     roll = int(input('>'))
+
+                     npc_lista[alvo].hp_saude, dano_efetivo = ataque(roll,
+                                                                     npc_lista[alvo].hp_saude,
+                                                                     npc_lista[indxr].base_damage,
+                                                                     npc_lista[indxr].base_combat_crit,
+                                                                     npc_lista[indxr].base_acc,
+                                                                     npc_lista[alvo].base_dodge)
+                     print(dano_efetivo)
+                     print(npc_lista[alvo].hp_saude)
+                     if npc_lista[alvo].hp_saude < 0:
+                         print('O alvo morreu!')
+                         npc_lista.remove(npc_lista[alvo])
+                     if npc.hp_saude < 0:
+                         print('Você morreu!')
+                         npc_lista.remove(npc_lista[indxr])
+                     rodada += 1
+             if acao == 'check':
+                 status_check(npc_lista)
+             else:
+                 print('___________')
+             # Após checar as ações é necessário checar os times para saber se o combate continua para o próximo round
+             # Se todos forem do mesmo time dos players, o combate se encerra. Caso contrario continua.
+             for npc in npc_lista:
+                 if npc_lista[npc].time == 0:
+                     # Esse é dos nossos, checa o próximo
+                     continue
+                 else:
+                     # Esse é inimigo, continua o combate
+                     combat_continue_flag += 1
+                     break
+             if combat_continue_flag == 0:
+                 combat_end_flag += 1
+             rodada += 1
+    return npc_lista
