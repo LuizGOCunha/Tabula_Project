@@ -5,49 +5,6 @@ import random
     ### obedecer a ordem ditada. Então aliados e oponentes irão seguir a ordem de ação e decidir o que fazer em cada turno,
     ### liberdade de ação sendo limitada pela criatividade do jogador e do DM.
 
-class NPC:
-    def __init__(self, nome, stg, agi, int, wis, cha, tou, per, wil, luc, ins, time):
-        ###Facilita a referencia aos stats
-        self.time = time
-        self.nome = nome
-        self.stg, self.agi, self.int, self.wis, self.cha = stg, agi, int, wis, cha
-        self.tou, self.per, self.wil, self.luc, self.ins = tou, per, wil, luc, ins
-        #Aqui temos a barra que nos mostra o quanto um personagem tolerou de dano físico
-        self.hp_saude = (tou * 5) + stg
-        ###Aqui temos a barra que nos mostra o quanto um personagem tolerou de dano mental
-        self.hp_stress = (wil * 5) + wis
-        ###Dano básico de cada personagem quando desarmado
-        self.base_damage = stg + agi/2
-        ###Esse número deve ser testado contra o dodge de um inimigo para testar um acerto
-        self.base_acc = round(((per * 3) + agi) * 5, 0)
-        ###Ao fazer o calculo (base_acc - base_dodge) temos a porcentagem de chance de acerto
-        self.base_dodge = round(((agi * 3) + per) * 2, 0)
-        ###Esse número deve ser testado num range(n,20): se o rolar do dado for abaixo de n é crit.
-        self.base_combat_crit = round((per/2 + agi/2 + luc)/10, 0)
-        ###insight_q é testado contra stress_q (iq - sq), como uma defesa mental. INT representa a capacidade de racionalizar.
-        self.insight_q = round((ins*2 + wil + int), 0)
-        ###Capacidade que um personagem tem de trazer um amigo de volta à sanidade.
-        self.pep_talk = cha*2 + wil
-
-rn = random.randint(0,100)
-
-
-
-
-players_lista = [
-    NPC('Player1', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0),
-    NPC('Player2', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0),
-    NPC('Player3', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0),
-    NPC('Player4', 10, 12, 6, 8, 9, 10, 12, 15, 8, 5, 0)
-]
-
-inimigos_lista = [
-NPC(f'abominacao{rn}', 30, 2, 1, 1, 0, 20, 2, 8, 2, 50, 1),
-NPC(f'carnical{rn}', 1, 13, 1, 1, 1, 3, 3, 2, 4, 25, 1),
-NPC(f'soldado{rn}', 8, 8, 6, 4, 6, 9, 8, 16, 5, 15, 1),
-NPC(f'campones{rn}', 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1)
-]
-
 
 def ataque(roll, vida_alvo, dano_base,combate_crit,acc,dodge):
     roll_crit = 20 - combate_crit
@@ -69,7 +26,7 @@ def ataque(roll, vida_alvo, dano_base,combate_crit,acc,dodge):
 ###Então ordenamos o combate através de turnos. Puxando funções de ataque e cheques quando necessário.
 ###O combate termina quando todos os inimigos ou heróis estiverem mortos.
 
-def prompt(players_lista, npc_lista):
+def prompt(players_lista, npc_lista, inimigos_lista):
     print('Bem vindo ao projeto Tabula.')
     while True:
         comando = input('>')
@@ -89,7 +46,7 @@ def prompt(players_lista, npc_lista):
                     if npc.nome == insert_input:
                         npc_lista.append(npc)
         elif comando == "combate":
-            npc_lista = combate_prompt(npc_lista)
+            npc_lista = combate_prompt(npc_lista, inimigos_lista)
         elif comando == "reset":
             print('Resetar quem?')
             reset_input = input('>')
@@ -110,7 +67,7 @@ def status_check(npc_lista):
         print(f'{npc_lista[indxc].nome}:')
         print(f'HP: {npc_lista[indxc].hp_saude}')
 
-def combate_prompt(npc_lista):
+def combate_prompt(npc_lista, inimigos_lista):
     print('Quais os inimigos? (Quantidade e oponentes separados por espaço, e sempre em singular)')
     for indx, x in enumerate(inimigos_lista):
         print(indx, inimigos_lista[indx].nome, inimigos_lista[indx].hp_saude)
@@ -122,7 +79,7 @@ def combate_prompt(npc_lista):
     for indx, x in enumerate(inimigos_lista):
         if x.nome == inimigo_tipo:
             for n in range(0,numero_inimigos):
-                npc_lista.append(inimigos_lista[indx]) # Aqui ele vai adicionar o mesmo inimigo varias vezes, é bom ter uma identificação, olha isso depois
+                npc_lista.append(inimigos_lista[indx]) # Aqui ele adiciona os inimigos, mas os atributos permanecem ligados pois acabam referenciando a lista original. Resolva isso.
     ###Ordenar os turnos através dos valores de agilidade de todos dentro de npc_lista
     npc_lista_agi = []
     while npc_lista:

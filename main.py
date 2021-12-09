@@ -66,13 +66,13 @@ players_lista = [
 ]
 
 inimigos_lista = [
-NPC(f'abominacao{random.randint(0,100)}', 30, 2, 1, 1, 0, 20, 2, 8, 2, 50, 1),
-NPC(f'carnical{random.randint(0,100)}', 2, 20, 1, 1, 1, 3, 3, 2, 4, 25, 1),
-NPC(f'soldado{random.randint(0,100)}', 8, 8, 6, 4, 6, 9, 8, 16, 5, 15, 1),
-NPC(f'campones{random.randint(0,100)}', 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1)
+NPC(f'abominacao', 30, 2, 1, 1, 0, 20, 2, 8, 2, 50, 1),
+NPC(f'carnical', 2, 10, 1, 1, 1, 3, 3, 2, 4, 25, 1),
+NPC(f'soldado', 8, 8, 6, 4, 6, 9, 8, 16, 5, 15, 1),
+NPC(f'campones', 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1)
 ]
 
 
 npc_lista = []
-prompt(players_lista,npc_lista)
+prompt(players_lista,npc_lista, inimigos_lista)
 
