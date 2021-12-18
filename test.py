@@ -1,3 +1,4 @@
+import copy
 import random
 
 
@@ -25,6 +26,10 @@ class NPC:
         ###Capacidade que um personagem tem de trazer um amigo de volta à sanidade.
         self.pep_talk = cha*2 + wil
 
+    @print
+    def printing(self):
+        return self.nome
+
 rn = random.randint(0,100)
 
 npc_lista = [
@@ -33,61 +38,30 @@ npc_lista = [
     NPC(f'Player2',10, 11, 6, 8, 9, 10, 12, 15, 8, 5,0),
     NPC(f'Player1',10, 15, 6, 8, 9, 10, 12, 15, 8, 5,0)
 ]
-#dic2 = {}
-
-#list = [20,40,60,30]
-
-#list2 = ['vinte', 'quarenta', 'sessenta', 'trinta']
 
 
 
-
-npc = []
-
-for indx, x in enumerate(npc_lista):
-    npc.append(npc_lista[indx])
-npc[1].hp_saude -= 3000
-print(npc_lista[1].hp_saude)
+npc_lista[0].printing
 
 
 
 
 
-
-
-
-#npc_lista_agi = []
-#while npc_lista:
-#    minimum = npc_lista[0]
-#    for x in npc_lista:
-#        if x.agi < minimum.agi:
-#            minimum = x
-#    npc_lista_agi.append(minimum)
-#    npc_lista.remove(minimum)
-#npc_lista = npc_lista_agi
-#for x in npc_lista:
-#    print(x.nome)
-
-
-
-
-#for idx1, x in enumerate(list):
-#    if x == 40:
-#        for idx2, y in enumerate(list2):
-#            if y == 'quarenta':
-#                list[idx1] = list2[idx2]
-#print(list, list2)
-
-#for idx, val in enumerate(list):
-#    print(idx, val)
-
-
-
-
-#valores_npc_dic = players_dic.values()
-#lista_npc_dic = list(valores_npc_dic)
-#lista_npc_agi = []
-#for x in lista_npc_dic:
-#    lista_npc_agi.append(x.agi)
+## testando se o objeto retorna cópias ou referencias
+#def printing(object):
+#    x = copy.deepcopy(object)
+#    x.nome = 'Jorge'
+#    return x
 #
-#print(lista_npc_agi)
+#
+#print(npc_lista[0])
+#print(printing(npc_lista[0]))
+#print (npc_lista[0] == printing(npc_lista[0]))
+#print(npc_lista[0].nome)
+#x = printing(npc_lista[0])
+#print(x.nome)
+## Em geral, só há retorno de referencias (Se espera que seja algo a ver com memory management)
+## Mas é possíel usar a função copy para criar uma nova instancia que pode ser inserida em nosso stage
+
+
+
